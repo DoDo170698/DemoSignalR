@@ -1,5 +1,33 @@
 ﻿"use strict";
 
+$(document).ready(function () {
+    $('.isNumber').keyup(delay(function (e) {
+        var v = $(this).val();
+        v = v.replace(/[^0-9]+/g, '');
+        $(this).val(commaSeparateNumber(v));
+
+    }, 250));
+})
+function delay(callback, ms) {
+    var timer = 0;
+    return function () {
+        var context = this, args = arguments;
+        clearTimeout(timer);
+        timer = setTimeout(function () {
+            callback.apply(context, args);
+        }, ms || 0);
+    };
+}
+function numberFormart(n) {
+    n = n.replace(/[^0-9]+/g, '');
+    return commaSeparateNumber(n);
+}
+function commaSeparateNumber(val) {
+    while (/(\d+)(\d{3})/.test(val.toString())) {
+        val = val.toString().replace(/(\d+)(\d{3})/, '$1' + ',' + '$2');
+    }
+    return val;
+}
 var connection = new signalR.HubConnectionBuilder().withUrl("/chathub").build();
 
 //Disable send button until connection is established
